@@ -163,7 +163,8 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form>
+            <div class="alert alert-info d-none alert_pesan" role="alert"><strong>Terimakasih.</strong> Pesan anda telah terkirim!</div>
+            <form name="form-contact">
               <div class="mb-3">
                 <label for="nama" class="form-label">Nama lengkap</label>
                 <input type="text" class="form-control" name="nama" id="nama" aria-describedby="nama" />
@@ -177,7 +178,11 @@
                 <textarea class="form-control" name="pesan" id="pesan" rows="3"></textarea>
               </div>
 
-              <button type="submit" class="btn btn-primary">Kirim</button>
+              <button type="submit" class="btn btn-primary btn_kirim">Kirim</button>
+              <button class="btn btn-primary btn_loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Mengirim...
+              </button>
             </form>
           </div>
         </div>
@@ -199,5 +204,45 @@
     <!-- akhir footer -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <!-- jquery -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+      integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycby7TBaJ34uefGXylet9dWgn9QxwdJk35g1Qhmj-qxpURBHvfWesWradIQW9Kx1FLrmg/exec";
+      const form = document.forms["form-contact"];
+      const btnKirim = document.querySelector(".btn_kirim");
+      const btnLoad = document.querySelector(".btn_loading");
+      const alert = document.querySelector(".alert_pesan");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoad.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            // tampilkan tombol kirim, hilangkan tombol loading
+            btnLoad.classList.toggle("d-none");
+            btnKirim.classList.toggle("d-none");
+
+            console.log("Success!", response);
+
+            // reset form
+            form.reset();
+            // tampilkan alert
+            alert.classList.toggle("d-none");
+          })
+          .catch((error) => console.error("Error!", error.message));
+
+        // hilangkan alert
+        alert.classList.toggle("d-none");
+      });
+    </script>
   </body>
 </html>
