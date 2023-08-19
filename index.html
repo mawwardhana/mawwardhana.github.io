@@ -235,14 +235,18 @@
 
             // reset form
             form.reset();
-            // tampilkan alert
-            alert.classList.toggle("d-none");
+            // tampilkan alert tunda 2 detik
+            setTimeout(alertDisplay, 2000);
           })
           .catch((error) => console.error("Error!", error.message));
 
-        // hilangkan alert
-        alert.classList.toggle("d-none");
+        // hilangkan alert tunda 2 detik
+        setTimeout(alertDisplay, 2000);
       });
+
+      function alertDisplay() {
+        alert.classList.toggle("d-none");
+      }
     </script>
   </body>
 </html>
